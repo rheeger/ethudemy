@@ -10,6 +10,7 @@ class App extends Component {
     players: [],
     balance: '',
     value: '',
+    message: '',
   };
 
   async componentDidMount() {
@@ -19,11 +20,30 @@ class App extends Component {
     this.setState({ manager, players, balance })
   }
 
-  async onSubmit() {
+  onSubmit = async event => {
+    event.preventDefault();
+
+    const accounts = await web3.eth.getAccounts();
+
+    this.setState({ message: 'Waiting on transaction success...' });
+
     await lotto.methods.enter().send({
-      from: web3.eth.getAccounts(),
+      from: accounts[0],
       value: web3.utils.toWei(this.state.value, 'ether')
     });
+
+    this.setState({ message: 'You have been entered!' })
+  }
+
+  onClick = async () => {
+    const accounts = await web3.eth.getAccounts();
+
+    this.setState({ messsage: 'Picking the lucky fuck...' });
+    await lotto.methods.pickWinner().send({
+      from: accounts[0]
+    });
+
+    this.setState({ messsage: 'Picking the lucky fuck...' });
   }
 
   render() {
@@ -49,6 +69,12 @@ class App extends Component {
           </div>
           <button>Enter Now!</button>
         </form>
+        <hr />
+        <h1>{this.state.message}</h1>
+        <hr />
+        <h4>Ready to pick a winner??</h4>
+        <button onClick={this.onClick}>PICK SOMEONE, BITCH!</button>
+        <hr />
       </div>
     );
   }
