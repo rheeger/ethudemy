@@ -7,29 +7,29 @@ const { interface, bytecode } = require('../compile');
 //TO BE REFACTORED ON COMPLETED CONTRACT
 
 
-let lotto;
+let campaign;
 let accounts;
 
 beforeEach(async () => {
     accounts = await web3.eth.getAccounts();
 
-    lotto = await new web3.eth.Contract(JSON.parse(interface))
+    campaign = await new web3.eth.Contract(JSON.parse(interface))
         .deploy({ data: bytecode })
         .send({ from: accounts[0], gas: '1000000' });
 })
 
 
-describe('Lotto contract', () => {
+describe('campaign contract', () => {
     it('deploys', () => {
-        assert.ok(lotto.options.address);
+        assert.ok(campaign.options.address);
     });
 
     // it('allows an entrant', async () => {
-    //     await lotto.methods.enter().send({
+    //     await campaign.methods.enter().send({
     //         from: accounts[0],
     //         value: web3.utils.toWei('.011', 'ether')
     //     });
-    //     const players = await lotto.methods.getPlayerAdds().call({
+    //     const players = await campaign.methods.getPlayerAdds().call({
     //         from: accounts[0]
     //     });
 
@@ -38,19 +38,19 @@ describe('Lotto contract', () => {
     // });
 
     // it('allows multiple entrants', async () => {
-    //     await lotto.methods.enter().send({
+    //     await campaign.methods.enter().send({
     //         from: accounts[0],
     //         value: web3.utils.toWei('.011', 'ether')
     //     });
-    //     await lotto.methods.enter().send({
+    //     await campaign.methods.enter().send({
     //         from: accounts[1],
     //         value: web3.utils.toWei('.011', 'ether')
     //     });
-    //     await lotto.methods.enter().send({
+    //     await campaign.methods.enter().send({
     //         from: accounts[2],
     //         value: web3.utils.toWei('.011', 'ether')
     //     });
-    //     const players = await lotto.methods.getPlayerAdds().call({
+    //     const players = await campaign.methods.getPlayerAdds().call({
     //         from: accounts[0]
     //     });
 
@@ -62,7 +62,7 @@ describe('Lotto contract', () => {
 
     // it('denies poor entrants', async() => {
     //     try {
-    //         await lotto.methods.enter().send({
+    //         await campaign.methods.enter().send({
     //             from: accounts[0],
     //             value: web3.utils.toWei('.09', 'ether')
     //         });
@@ -74,7 +74,7 @@ describe('Lotto contract', () => {
 
     // it('only lets the manager payout', async() => {
     //     try {
-    //         await lotto.methods.pickWinner().send({
+    //         await campaign.methods.pickWinner().send({
     //             from: accounts[1],
     //         });
     //         assert(false);
@@ -84,14 +84,14 @@ describe('Lotto contract', () => {
     // })
 
     // it('works end to end and resets', async() => {
-    //     await lotto.methods.enter().send({
+    //     await campaign.methods.enter().send({
     //         from: accounts[0],
     //         value: web3.utils.toWei('2', 'ether')
     //     });
 
     //     const initialBalance = await web3.eth.getBalance(accounts[0]);
 
-    //     await lotto.methods.pickWinner().send({
+    //     await campaign.methods.pickWinner().send({
     //         from: accounts[0],});
 
     //     const finalBalance = await web3.eth.getBalance(accounts[0]);
@@ -100,7 +100,7 @@ describe('Lotto contract', () => {
     //     console.log(finalBalance - initialBalance);
     //     assert(difference > web3.utils.toWei('1.8', 'ether'));
 
-    //     assert(lotto.methods.players.length == 0);
+    //     assert(campaign.methods.players.length == 0);
 
 
 })
