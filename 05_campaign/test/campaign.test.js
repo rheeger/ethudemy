@@ -32,86 +32,63 @@ describe('Campaigns', () => {
 		assert.ok(factory.options.address);
 		assert.ok(campaign.options.address);
 	});
+
+	it('marks the caller as the campaign manager', async () => {
+		const manager = await campaign.methods.manager().call();
+		assert.equal(accounts[0], manager);
+	});
+
+	it('allows a contribution, and marks as an approver', async () => {
+		await campaign.methods.contribute().send({
+			value: '200',
+			from: accounts[1]
+		});
+		const isContributor = await campaign.methods.approvers(accounts[1]).call();
+		assert(isContributor);
+	});
+
+	it('denies poor entrants', async () => {
+		try {
+			await campaign.methods.enter().send({
+				from: accounts[1],
+				value: '5'
+			});
+			assert(false);
+		} catch (err) {
+			assert(err);
+		}
+	});
+
+	it('allows manager to request payment', async () => {
+		await campaign.methods.createRequest('Buy batteries', '100', accounts[1]).send({
+			from: accounts[0],
+			gas: '1000000'
+		});
+		const request = await campaign.methods.requests(0).call();
+
+		assert.equal('Buy batteries', request.description);
+	});
+
+	it('processes completed requests', async () => {
+		await campaign.methods.contribute().send({
+			from: accounts[0],
+			value: web3.utils.toWei('10', 'ether')
+		});
+
+		await campaign.methods
+			.createRequest('A', web3.utils.toWei('5', 'ether'), accounts[1])
+			.send({ from: accounts[0], gas: '1000000' });
+
+		await campaign.methods.approveRequest(0).send({
+			from: accounts[0],
+			gas: '1000000'
+		});
+
+		await campaign.methods.finalizeRequest(0).send({ from: accounts[0], gas: '1000000' });
+
+		let balance = await web3.eth.getBalance(accounts[1]);
+		balance = web3.utils.fromWei(balance, 'ether');
+		balance = parseFloat(balance);
+		assert(balance > 104);
+	});
 });
-
-//     // it('allows an entrant', async () => {
-//     //     await campaign.methods.enter().send({
-//     //         from: accounts[0],
-//     //         value: web3.utils.toWei('.011', 'ether')
-//     //     });
-//     //     const players = await campaign.methods.getPlayerAdds().call({
-//     //         from: accounts[0]
-//     //     });
-
-//     //     assert.equal(accounts[0], players[0]);
-//     //     assert.equal(1, players.length);
-//     // });
-
-//     // it('allows multiple entrants', async () => {
-//     //     await campaign.methods.enter().send({
-//     //         from: accounts[0],
-//     //         value: web3.utils.toWei('.011', 'ether')
-//     //     });
-//     //     await campaign.methods.enter().send({
-//     //         from: accounts[1],
-//     //         value: web3.utils.toWei('.011', 'ether')
-//     //     });
-//     //     await campaign.methods.enter().send({
-//     //         from: accounts[2],
-//     //         value: web3.utils.toWei('.011', 'ether')
-//     //     });
-//     //     const players = await campaign.methods.getPlayerAdds().call({
-//     //         from: accounts[0]
-//     //     });
-
-//     //     assert.equal(accounts[0], players[0]);
-//     //     assert.equal(accounts[1], players[1]);
-//     //     assert.equal(accounts[2], players[2]);
-//     //     assert.equal(3, players.length);
-//     // });
-
-//     // it('denies poor entrants', async() => {
-//     //     try {
-//     //         await campaign.methods.enter().send({
-//     //             from: accounts[0],
-//     //             value: web3.utils.toWei('.09', 'ether')
-//     //         });
-//     //         assert(false);
-//     //     } catch (err){
-//     //         assert(err);
-//     //     }
-//     // })
-
-//     // it('only lets the manager payout', async() => {
-//     //     try {
-//     //         await campaign.methods.pickWinner().send({
-//     //             from: accounts[1],
-//     //         });
-//     //         assert(false);
-//     //     } catch (err){
-//     //         assert(err);
-//     //     }
-//     // })
-
-//     // it('works end to end and resets', async() => {
-//     //     await campaign.methods.enter().send({
-//     //         from: accounts[0],
-//     //         value: web3.utils.toWei('2', 'ether')
-//     //     });
-
-//     //     const initialBalance = await web3.eth.getBalance(accounts[0]);
-
-//     //     await campaign.methods.pickWinner().send({
-//     //         from: accounts[0],});
-
-//     //     const finalBalance = await web3.eth.getBalance(accounts[0]);
-
-//     //     const difference = finalBalance - initialBalance;
-//     //     console.log(finalBalance - initialBalance);
-//     //     assert(difference > web3.utils.toWei('1.8', 'ether'));
-
-//     //     assert(campaign.methods.players.length == 0);
-
-// })
-
-// });
