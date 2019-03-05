@@ -20,8 +20,8 @@ class CampaignNew extends Component {
 		return (
 			<Layout>
 				<h3>Create a Campaign</h3>
-				<Form>
-					<Form.Field onSubmit={this.onSubmit}>
+				<Form onSubmit={this.onSubmit}>
+					<Form.Field>
 						<label>Minimum Contribution</label>
 						<Input
 							label="wei"
