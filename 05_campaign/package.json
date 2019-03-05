@@ -6,6 +6,7 @@
 		"fs-extra": "^7.0.1",
 		"ganache-cli": "^6.4.1",
 		"mocha": "^6.0.2",
+		"next": "^4.1.4",
 		"react": "^16.8.3",
 		"react-dom": "^16.8.3",
 		"react-scripts": "2.1.5",
@@ -17,15 +18,11 @@
 		"start": "react-scripts start",
 		"build": "react-scripts build",
 		"test": "mocha",
-		"eject": "react-scripts eject"
+		"eject": "react-scripts eject",
+		"dev": "next dev"
 	},
 	"eslintConfig": {
 		"extends": "react-app"
 	},
-	"browserslist": [
-		">0.2%",
-		"not dead",
-		"not ie <= 11",
-		"not op_mini all"
-	]
+	"browserslist": [ ">0.2%", "not dead", "not ie <= 11", "not op_mini all" ]
 }
