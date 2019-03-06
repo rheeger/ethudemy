@@ -74,6 +74,11 @@ class RequestNew extends Component {
 					<Button primary loading={this.state.loading}>
 						Create!
 					</Button>
+					<Link route={`/campaigns/${this.props.address}/requests`}>
+						<a>
+							<Button secondary>View Requests</Button>
+						</a>
+					</Link>
 				</Form>
 			</Layout>
 		);
