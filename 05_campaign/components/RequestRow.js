@@ -57,7 +57,7 @@ class RequestRow extends Component {
 		const readytoFinalize = request.approvalCount > approversCount / 2;
 		return (
 			<Table.Row positive={readytoFinalize && !request.complete} disabled={request.complete}>
-				<Table.Cell>{id}</Table.Cell>
+				<Table.Cell>#{id + 1}</Table.Cell>
 				<Table.Cell>{request.description}</Table.Cell>
 				<Table.Cell>{web3.utils.fromWei(request.value, 'ether')}</Table.Cell>
 				<Table.Cell>{request.recipient}</Table.Cell>
